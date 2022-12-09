@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -21,166 +21,268 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@color/gray"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="start"
-            android:text="总测试结果"
-            android:textSize="18dp" />
+            android:orientation="vertical"
+            tools:context=".MainActivity">
 
-        <TextView
-            android:id="@+id/tv_total_test_result"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="-"
-            android:textSize="18dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="总测试结果"
+                    android:textSize="18dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@color/gray"
-        android:orientation="horizontal"
-        android:padding="10dp">
+                <TextView
+                    android:id="@+id/tv_total_test_result"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="-"
+                    android:textSize="18dp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="start"
-            android:text="异常展讯platform签名"
-            android:textSize="18dp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_abnormal_sprd_platform"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="-"
-            android:textSize="18dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="异常展讯platform签名"
+                    android:textSize="18dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@color/gray"
-        android:orientation="horizontal"
-        android:padding="10dp">
+                <TextView
+                    android:id="@+id/tv_abnormal_sprd_platform"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="-"
+                    android:textSize="18dp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="start"
-            android:text="异常展讯media签名"
-            android:textSize="18dp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_abnormal_sprd_media"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="-"
-            android:textSize="18dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="异常展讯media签名"
+                    android:textSize="18dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@color/gray"
-        android:orientation="horizontal"
-        android:padding="10dp">
+                <TextView
+                    android:id="@+id/tv_abnormal_sprd_media"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="-"
+                    android:textSize="18dp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="start"
-            android:text="正常沃特platform签名"
-            android:textSize="18dp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_normal_ww_platform"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="-"
-            android:textSize="18dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="正常沃特platform签名"
+                    android:textSize="18dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@color/gray"
-        android:orientation="horizontal"
-        android:padding="10dp">
+                <TextView
+                    android:id="@+id/tv_normal_ww_platform"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="-"
+                    android:textSize="18dp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="start"
-            android:text="正常沃特media签名"
-            android:textSize="18dp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_normal_ww_media"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="-"
-            android:textSize="18dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="正常沃特media签名"
+                    android:textSize="18dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@color/gray"
-        android:orientation="horizontal"
-        android:padding="10dp">
+                <TextView
+                    android:id="@+id/tv_normal_ww_media"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="-"
+                    android:textSize="18dp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="start"
-            android:text="其它签名"
-            android:textSize="18dp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_other"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="-"
-            android:textSize="18dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="BLU签名"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/tv_blu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="-"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="mainLine签名(功能测试中)"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/tv_mainline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="-"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="google签名(功能测试中)"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/tv_google"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="-"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_other"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/gray"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:text="其它签名"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/tv_other"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="-"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

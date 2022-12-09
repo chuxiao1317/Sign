@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,13 +17,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.ww.sign.entity.OtherEntity;
 import com.ww.sign.entity.SubListEntity;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     String TAG = "AppSigning";
@@ -51,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
     // AC:FC:D8:16:F4:C4:84:89:79:E9:96:8A:20:3D:9C:1B:2B:4A:35:E3:65:C0:FD:DD:22:82:03:15:CD:A1:8D:A4
     private static final String SIGN_WW_PLATFORM_SHA256 = "ACFCD816F4C4848979E9968A203D9C1B2B4A35E365C0FDDD22820315CDA18DA4";
 
+    private static final String SIGN_BLU_SHA1 = "23F68E794D093C7D7F78D81C7D358FB70E18D49C";
+    private static final String SIGN_BLU_SHA256 = "5B56FA35FD4C4082DC2F9390C9DC1470802ECD5B623BDF55FC61EABF840EFACC";
+
+    private static final String SIGN_MAINLINE_SHA1 = "B99DD2248A4882E560503BA1B6CB10EFB3808F21";
+    private static final String SIGN_MAINLINE_SHA256 = "184605095BE6CA22D055F34EFAF01344FD3AB3B5638C30627610EEAE8A260B29";
+
+    private static final String SIGN_GOOGLE_SHA1 = "38918A453D07199354F8B19AF05EC6562CED5788";
+    private static final String SIGN_GOOGLE_SHA256 = "F0FD6C5B410F25CB25C3B53346C8972FAE30F8EE7411DF910480AD6B2D60DB83";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,18 +86,13 @@ public class MainActivity extends AppCompatActivity {
     private void loadApps() {
         List<PackageInfo> apps = getPackageManager().getInstalledPackages(0);
         Log.d(TAG, "chuxiao showTotalTestResult, chuxiaoSize apps.size: " + apps.size());
-        //排序
-        /*Collections.sort(apps, (a, b) -> String.CASE_INSENSITIVE_ORDER.compare(
-                a.loadLabel(getPackageManager()).toString(),
-                b.loadLabel(getPackageManager()).toString()
-        ));*/
         showTotalTestResult(apps);
     }
 
     @SuppressLint("SetTextI18n")
     private void showTotalTestResult(List<PackageInfo> list) {
         Log.d(TAG, "chuxiao showTotalTestResult, chuxiaoSize list.size: " + list.size());
-        if (list == null || list.isEmpty()) {
+        if (list.isEmpty()) {
             return;
         }
         List<PackageInfo> listTotalPass = new ArrayList<>();
@@ -91,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
         List<PackageInfo> listSprdMedia = new ArrayList<>();
         List<PackageInfo> listWwPlatform = new ArrayList<>();
         List<PackageInfo> listWwMedia = new ArrayList<>();
+        List<PackageInfo> listBlu = new ArrayList<>();
+        List<PackageInfo> listMainLine = new ArrayList<>();
+        List<PackageInfo> listGoogle = new ArrayList<>();
         List<PackageInfo> listOther = new ArrayList<>();
         for (PackageInfo item : list) {
             if (item == null) {
@@ -135,6 +148,27 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA256: " + tempSHA256);
                 listWwPlatform.add(item);
             }
+            if (SIGN_BLU_SHA1.equalsIgnoreCase(tempSHA1) && SIGN_BLU_SHA256.equalsIgnoreCase(tempSHA256)) {
+                // blu签名
+                Log.d(TAG, "chuxiao showTotalTestResult ww platform, packageName: " + packageName);
+                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA1: " + tempSHA1);
+                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA256: " + tempSHA256);
+                listBlu.add(item);
+            }
+            if (SIGN_MAINLINE_SHA1.equalsIgnoreCase(tempSHA1) && SIGN_MAINLINE_SHA256.equalsIgnoreCase(tempSHA256)) {
+                // mainLine签名
+                Log.d(TAG, "chuxiao showTotalTestResult ww platform, packageName: " + packageName);
+                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA1: " + tempSHA1);
+                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA256: " + tempSHA256);
+                listMainLine.add(item);
+            }
+            if (SIGN_GOOGLE_SHA1.equalsIgnoreCase(tempSHA1) && SIGN_GOOGLE_SHA256.equalsIgnoreCase(tempSHA256)) {
+                // google签名
+                Log.d(TAG, "chuxiao showTotalTestResult ww platform, packageName: " + packageName);
+                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA1: " + tempSHA1);
+                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA256: " + tempSHA256);
+                listGoogle.add(item);
+            }
             if (!SIGN_SPRD_PLATFORM_SHA1.equalsIgnoreCase(tempSHA1)
                     && !SIGN_SPRD_PLATFORM_SHA256.equalsIgnoreCase(tempSHA256)
                     && !SIGN_SPRD_MEDIA_SHA1.equalsIgnoreCase(tempSHA1)
@@ -142,7 +176,13 @@ public class MainActivity extends AppCompatActivity {
                     && !SIGN_WW_PLATFORM_SHA1.equalsIgnoreCase(tempSHA1)
                     && !SIGN_WW_PLATFORM_SHA256.equalsIgnoreCase(tempSHA256)
                     && !SIGN_WW_MEDIA_SHA1.equalsIgnoreCase(tempSHA1)
-                    && !SIGN_WW_MEDIA_SHA256.equalsIgnoreCase(tempSHA256)) {
+                    && !SIGN_WW_MEDIA_SHA256.equalsIgnoreCase(tempSHA256)
+                    && !SIGN_BLU_SHA1.equalsIgnoreCase(tempSHA1)
+                    && !SIGN_BLU_SHA256.equalsIgnoreCase(tempSHA256)
+                    && !SIGN_MAINLINE_SHA1.equalsIgnoreCase(tempSHA1)
+                    && !SIGN_MAINLINE_SHA256.equalsIgnoreCase(tempSHA256)
+                    && !SIGN_GOOGLE_SHA1.equalsIgnoreCase(tempSHA1)
+                    && !SIGN_GOOGLE_SHA256.equalsIgnoreCase(tempSHA256)) {
                 // 其它签名
                 Log.d(TAG, "chuxiao showTotalTestResult other, packageName: " + packageName);
                 Log.d(TAG, "chuxiao showTotalTestResult other, SHA1: " + tempSHA1);
@@ -151,11 +191,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         ((TextView) findViewById(R.id.tv_total_test_result)).setText(listTotalPass.size() + "/" + list.size());
-        ((TextView) findViewById(R.id.tv_abnormal_sprd_platform)).setText(listSprdPlatform.size() + "/" + list.size());
-        ((TextView) findViewById(R.id.tv_abnormal_sprd_media)).setText(listSprdMedia.size() + "/" + list.size());
-        ((TextView) findViewById(R.id.tv_normal_ww_platform)).setText(listWwPlatform.size() + "/" + list.size());
-        ((TextView) findViewById(R.id.tv_normal_ww_media)).setText(listWwMedia.size() + "/" + list.size());
-        ((TextView) findViewById(R.id.tv_other)).setText(listOther.size() + "/" + list.size());
+        ((TextView) findViewById(R.id.tv_abnormal_sprd_platform)).setText(listSprdPlatform.size() + "");
+        ((TextView) findViewById(R.id.tv_abnormal_sprd_media)).setText(listSprdMedia.size() + "");
+        ((TextView) findViewById(R.id.tv_normal_ww_platform)).setText(listWwPlatform.size() + "");
+        ((TextView) findViewById(R.id.tv_normal_ww_media)).setText(listWwMedia.size() + "");
+        ((TextView) findViewById(R.id.tv_blu)).setText(listBlu.size() + "");
+        ((TextView) findViewById(R.id.tv_mainline)).setText(listMainLine.size() + "");
+        ((TextView) findViewById(R.id.tv_google)).setText(listGoogle.size() + "");
+        ((TextView) findViewById(R.id.tv_other)).setText(listOther.size() + "");
         // 总测试结果设置字体颜色
         if (listTotalFail == null || listTotalFail.isEmpty()) {
             ((TextView) findViewById(R.id.tv_total_test_result)).setTextColor(Color.GREEN);
@@ -167,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
         ((LinearLayout) findViewById(R.id.tv_total_test_result).getParent()).setOnClickListener(view -> {
             if (listTotalFail == null || listTotalFail.isEmpty()) {
-                Toast.makeText(MainActivity.this, "该项无子内容", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(MainActivity.this, SubListActivity.class);
@@ -176,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         });
         ((LinearLayout) findViewById(R.id.tv_abnormal_sprd_platform).getParent()).setOnClickListener(view -> {
             if (listSprdPlatform == null || listSprdPlatform.isEmpty()) {
-                Toast.makeText(MainActivity.this, "该项无子内容", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(MainActivity.this, SubListActivity.class);
@@ -185,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         });
         ((LinearLayout) findViewById(R.id.tv_abnormal_sprd_media).getParent()).setOnClickListener(view -> {
             if (listSprdMedia == null || listSprdMedia.isEmpty()) {
-                Toast.makeText(MainActivity.this, "该项无子内容", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(MainActivity.this, SubListActivity.class);
@@ -194,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
         });
         ((LinearLayout) findViewById(R.id.tv_normal_ww_platform).getParent()).setOnClickListener(view -> {
             if (listWwPlatform == null || listWwPlatform.isEmpty()) {
-                Toast.makeText(MainActivity.this, "该项无子内容", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(MainActivity.this, SubListActivity.class);
@@ -203,16 +246,47 @@ public class MainActivity extends AppCompatActivity {
         });
         ((LinearLayout) findViewById(R.id.tv_normal_ww_media).getParent()).setOnClickListener(view -> {
             if (listWwMedia == null || listWwMedia.isEmpty()) {
-                Toast.makeText(MainActivity.this, "该项无子内容", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(MainActivity.this, SubListActivity.class);
             intent.putExtra(Constant.IntentTAG.SUB_LIST, new SubListEntity(listWwMedia));
             startActivity(intent);
         });
+        ((LinearLayout) findViewById(R.id.tv_blu).getParent()).setOnClickListener(view -> {
+            if (listBlu == null || listBlu.isEmpty()) {
+                Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(MainActivity.this, SubListActivity.class);
+            intent.putExtra(Constant.IntentTAG.SUB_LIST, new SubListEntity(listBlu));
+            startActivity(intent);
+        });
+        ((LinearLayout) findViewById(R.id.tv_mainline).getParent()).setOnClickListener(view -> {
+            if (listMainLine == null || listMainLine.isEmpty()) {
+                Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(MainActivity.this, SubListActivity.class);
+            intent.putExtra(Constant.IntentTAG.SUB_LIST, new SubListEntity(listMainLine));
+            startActivity(intent);
+        });
+        ((LinearLayout) findViewById(R.id.tv_google).getParent()).setOnClickListener(view -> {
+            if (listGoogle == null || listGoogle.isEmpty()) {
+                Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(MainActivity.this, SubListActivity.class);
+            intent.putExtra(Constant.IntentTAG.SUB_LIST, new SubListEntity(listGoogle));
+            startActivity(intent);
+        });
+
+        // 初始化其它未知签名分类的列表
+        initOtherRv(listOther);
+
         ((LinearLayout) findViewById(R.id.tv_other).getParent()).setOnClickListener(view -> {
             if (listOther == null || listOther.isEmpty()) {
-                Toast.makeText(MainActivity.this, "该项无子内容", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(MainActivity.this, SubListActivity.class);
@@ -220,6 +294,62 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         Toast.makeText(this, "加载成功", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 初始化其它未知签名分类的RecyclerView
+     */
+    private void initOtherRv(List<PackageInfo> listOther) {
+        Set<String> set = getSignSet(listOther);
+        List<OtherEntity> otherEntityList = getOtherList(set, listOther);
+        RecyclerView rvOther = findViewById(R.id.rv_other);
+        rvOther.setLayoutManager(new LinearLayoutManager(this));
+        rvOther.setAdapter(new OtherAdapter(this, otherEntityList));
+    }
+
+    /**
+     * 获取要显示在首页的分类签名
+     */
+    private List<OtherEntity> getOtherList(Set<String> set, List<PackageInfo> list) {
+        List<OtherEntity> resultList = new ArrayList<>();
+        List<PackageInfo> otherSingleList = new ArrayList<>();
+        for (String str : set) {
+            if (TextUtils.isEmpty(str)) {
+                continue;
+            }
+            List<PackageInfo> typeList = new ArrayList<>();
+            for (PackageInfo item : list) {
+                if (str.equals(getSingInfo(this, item.packageName, SHA1))) {
+                    typeList.add(item);
+                }
+            }
+            if (typeList.size() <= 1) {
+                // 独立签名：只有一个app有这个签名
+                otherSingleList.addAll(typeList);
+                continue;
+            }
+            // 数量多于一个的分类签名
+            OtherEntity entity = new OtherEntity();
+            entity.typeList = typeList;
+            resultList.add(entity);
+        }
+        // 其它独立签名，放在一起显示
+        OtherEntity entity = new OtherEntity();
+        entity.typeList = otherSingleList;
+        entity.isOtherSingle = true;
+        resultList.add(entity);
+        return resultList;
+    }
+
+    /**
+     * 去重
+     */
+    private Set<String> getSignSet(List<PackageInfo> list) {
+        Set<String> set = new LinkedHashSet<>();
+        for (PackageInfo item : list) {
+            set.add(getSingInfo(this, item.packageName, SHA1));
+        }
+        return set;
     }
 
     /**
@@ -237,7 +367,10 @@ public class MainActivity extends AppCompatActivity {
         try {
             Signature[] signs = getSignatures(context, packageName);
 //                Log.e(TAG, "signs =  " + Arrays.asList(signs));
-            Signature sig = signs[0];
+            Signature sig = null;
+            if (signs != null) {
+                sig = signs[0];
+            }
 
             if (MD5.equals(type)) {
                 tmp = getSignatureString(sig, MD5);
@@ -271,24 +404,25 @@ public class MainActivity extends AppCompatActivity {
      * 获取相应的类型的字符串（把签名的byte[]信息转换成16进制）
      */
     public static String getSignatureString(Signature sig, String type) {
+        if (sig == null) {
+            return "";
+        }
         byte[] hexBytes = sig.toByteArray();
         String fingerprint = "error!";
         try {
             StringBuilder builder = new StringBuilder();
             MessageDigest digest = MessageDigest.getInstance(type);
-            if (digest != null) {
-                digest.reset();
-                digest.update(hexBytes);
-                byte[] byteArray = digest.digest();
-                for (byte b : byteArray) {
-                    if (Integer.toHexString(0xFF & b).length() == 1) {
-                        builder.append("0").append(Integer.toHexString(0xFF & b)); //补0，转换成16进制
-                    } else {
-                        builder.append(Integer.toHexString(0xFF & b));//转换成16进制
-                    }
+            digest.reset();
+            digest.update(hexBytes);
+            byte[] byteArray = digest.digest();
+            for (byte b : byteArray) {
+                if (Integer.toHexString(0xFF & b).length() == 1) {
+                    builder.append("0").append(Integer.toHexString(0xFF & b)); //补0，转换成16进制
+                } else {
+                    builder.append(Integer.toHexString(0xFF & b));//转换成16进制
                 }
-                fingerprint = builder.toString().toUpperCase(); //转换成大写
             }
+            fingerprint = builder.toString().toUpperCase(); //转换成大写
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
