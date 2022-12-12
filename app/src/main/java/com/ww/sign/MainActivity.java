@@ -57,14 +57,72 @@ public class MainActivity extends AppCompatActivity {
     // AC:FC:D8:16:F4:C4:84:89:79:E9:96:8A:20:3D:9C:1B:2B:4A:35:E3:65:C0:FD:DD:22:82:03:15:CD:A1:8D:A4
     private static final String SIGN_WW_PLATFORM_SHA256 = "ACFCD816F4C4848979E9968A203D9C1B2B4A35E365C0FDDD22820315CDA18DA4";
 
+    // BLU签名
     private static final String SIGN_BLU_SHA1 = "23F68E794D093C7D7F78D81C7D358FB70E18D49C";
     private static final String SIGN_BLU_SHA256 = "5B56FA35FD4C4082DC2F9390C9DC1470802ECD5B623BDF55FC61EABF840EFACC";
 
-    private static final String SIGN_MAINLINE_SHA1 = "B99DD2248A4882E560503BA1B6CB10EFB3808F21";
-    private static final String SIGN_MAINLINE_SHA256 = "184605095BE6CA22D055F34EFAF01344FD3AB3B5638C30627610EEAE8A260B29";
 
+    /**
+     * mainLine签名
+     */
+    // com.google.android.ext.services
+    private static final String package_ext_services = "com.google.android.ext.services";
+    private static final String sign_sha1_ext_services = "B99DD2248A4882E560503BA1B6CB10EFB3808F21";
+    private static final String sign_sha256_ext_services = "184605095BE6CA22D055F34EFAF01344FD3AB3B5638C30627610EEAE8A260B29";
+
+    // GooglePermissionController
+    private static final String package_permissioncontroller = "com.google.android.permissioncontroller";
+    private static final String sign_sha1_permissioncontroller = "1D156D16E46B29796EF586B1B6C80E8690156717";
+
+    // /apex/com.android.tethering/priv-app/TetheringGoogle@331012080/TetheringGoogle.apk
+    private static final String package_tethering = "com.google.android.networkstack.tethering";
+    private static final String sign_sha1_tethering = "C6AE382FFB7836E34B4F499D11A41FE0FE003CB8";
+
+    // /apex/com.android.cellbroadcast/priv-app/GoogleCellBroadcastServiceModule@331013010/GoogleCellBroadcastServiceModule.apk
+    private static final String package_cellbroadcastservice = "com.google.android.cellbroadcastservice";
+    private static final String sign_sha1_cellbroadcastservice = "C6AE382FFB7836E34B4F499D11A41FE0FE003CB8";
+
+    // /apex/com.android.mediaprovider/priv-app/MediaProvider/MediaProvider.apk
+    private static final String package_provider_media_module = "com.android.providers.media.module";
+    private static final String sign_sha1_provider_media_module = "B5710F5E6925774AFECC64034047100DD2F7F841";
+
+    // /apex/com.android.mediaprovider/priv-app/MediaProviderGoogle@331011070/MediaProviderGoogle.apk
+    private static final String package_provider_media_module_google = "com.google.android.providers.media.module";
+    private static final String sign_sha1_provider_media_module_google = "5AF68C62C5E3E025E0696218569119D3F8C83403";
+
+
+    /**
+     * google签名
+     */
     private static final String SIGN_GOOGLE_SHA1 = "38918A453D07199354F8B19AF05EC6562CED5788";
     private static final String SIGN_GOOGLE_SHA256 = "F0FD6C5B410F25CB25C3B53346C8972FAE30F8EE7411DF910480AD6B2D60DB83";
+
+    // product/priv-app/Wellbeing/Wellbeing.apk
+    // com.google.android.apps.wellbeing
+    private static final String package_wellbeing = "com.google.android.apps.wellbeing";
+    private static final String sign_sha1_wellbeing = "4EBDD02380F1FA0B6741491F0AF35625DBA76E9F";
+
+    // system/priv-app/GooglePackageInstaller/GooglePackageInstaller.apk
+    // com.google.android.packageinstaller
+    private static final String package_packageinstaller = "com.google.android.packageinstaller";
+    private static final String sign_sha1_packageinstaller = "82F34042B49BFDB66209047207B4434F0658218A";
+
+    // /apex/com.android.tethering/priv-app/TetheringGoogle@331012080/TetheringGoogle.apk
+    private static final String package_networkstack = "com.google.android.networkstack";
+    private static final String sign_sha1_networkstack = "C6AE382FFB7836E34B4F499D11A41FE0FE003CB8";
+
+    // /apex/com.android.tethering/priv-app/TetheringGoogle@331012080/TetheringGoogle.apk
+    private static final String package_permissionconfig = "com.google.android.networkstack.permissionconfig";
+    private static final String sign_sha1_permissionconfig = "C6AE382FFB7836E34B4F499D11A41FE0FE003CB8";
+
+
+    /**
+     * 展讯闭源签名
+     */
+    private static final String SIGN_SPRD_CLOSE_SHA1_1 = "01C2F0558736E8B9883952CF488BE007A4BF75A9";
+    private static final String SIGN_SPRD_CLOSE_SHA1_2 = "B5710F5E6925774AFECC64034047100DD2F7F841";
+    private static final String SIGN_SPRD_CLOSE_SHA1_3 = "13D80060D086FC38567165CE80507DEFCC96E516";//A11
+    private static final String SIGN_SPRD_CLOSE_SHA1_4 = "6277525C8E29113EE8A37BBB9426046BF428B588";//A12
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         initView();
         loadApps();
+        // Cmd.execRootCmd("adb devices");
     }
 
     private void initView() {
@@ -104,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         List<PackageInfo> listBlu = new ArrayList<>();
         List<PackageInfo> listMainLine = new ArrayList<>();
         List<PackageInfo> listGoogle = new ArrayList<>();
+        List<PackageInfo> listSprdClose = new ArrayList<>();
         List<PackageInfo> listOther = new ArrayList<>();
         for (PackageInfo item : list) {
             if (item == null) {
@@ -112,6 +172,9 @@ public class MainActivity extends AppCompatActivity {
             String packageName = item.packageName;
             String tempSHA1 = getSingInfo(this, packageName, "SHA1");
             String tempSHA256 = getSingInfo(this, packageName, "SHA256");
+            Log.d(TAG, "chuxiao showTotalTestResult, packageName: " + packageName);
+            Log.d(TAG, "chuxiao showTotalTestResult, SHA1: " + tempSHA1);
+            Log.d(TAG, "chuxiao showTotalTestResult, SHA256: " + tempSHA256);
             if (SIGN_SPRD_MEDIA_SHA1.equalsIgnoreCase(tempSHA1) || SIGN_SPRD_MEDIA_SHA256.equalsIgnoreCase(tempSHA256)) {
                 // 异常展讯platform签名
                 Log.d(TAG, "chuxiao showTotalTestResult fail, media packageName: " + packageName);
@@ -119,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "chuxiao showTotalTestResult fail, media SHA256: " + tempSHA256);
                 listTotalFail.add(item);
                 listSprdMedia.add(item);
+                continue;
             } else if (SIGN_SPRD_PLATFORM_SHA1.equalsIgnoreCase(tempSHA1) || SIGN_SPRD_PLATFORM_SHA256.equalsIgnoreCase(tempSHA256)) {
                 // 异常展讯media签名
                 Log.d(TAG, "chuxiao showTotalTestResult fail, platform packageName: " + packageName);
@@ -126,70 +190,68 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "chuxiao showTotalTestResult fail, platform SHA256: " + tempSHA256);
                 listTotalFail.add(item);
                 listSprdPlatform.add(item);
+                continue;
             } else {
                 // 无展讯签名即pass
-                Log.d(TAG, "chuxiao showTotalTestResult pass, packageName: " + packageName);
-                Log.d(TAG, "chuxiao showTotalTestResult pass, SHA1: " + tempSHA1);
-                Log.d(TAG, "chuxiao showTotalTestResult pass, SHA256: " + tempSHA256);
                 listTotalPass.add(item);
             }
 
             if (SIGN_WW_MEDIA_SHA1.equalsIgnoreCase(tempSHA1) && SIGN_WW_MEDIA_SHA256.equalsIgnoreCase(tempSHA256)) {
                 // 正常沃特media签名
-                Log.d(TAG, "chuxiao showTotalTestResult ww media, packageName: " + packageName);
-                Log.d(TAG, "chuxiao showTotalTestResult ww media, SHA1: " + tempSHA1);
-                Log.d(TAG, "chuxiao showTotalTestResult ww media, SHA256: " + tempSHA256);
                 listWwMedia.add(item);
+                continue;
             }
             if (SIGN_WW_PLATFORM_SHA1.equalsIgnoreCase(tempSHA1) && SIGN_WW_PLATFORM_SHA256.equalsIgnoreCase(tempSHA256)) {
                 // 正常沃特platfrom签名
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, packageName: " + packageName);
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA1: " + tempSHA1);
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA256: " + tempSHA256);
                 listWwPlatform.add(item);
+                continue;
             }
             if (SIGN_BLU_SHA1.equalsIgnoreCase(tempSHA1) && SIGN_BLU_SHA256.equalsIgnoreCase(tempSHA256)) {
                 // blu签名
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, packageName: " + packageName);
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA1: " + tempSHA1);
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA256: " + tempSHA256);
                 listBlu.add(item);
+                continue;
             }
-            if (SIGN_MAINLINE_SHA1.equalsIgnoreCase(tempSHA1) && SIGN_MAINLINE_SHA256.equalsIgnoreCase(tempSHA256)) {
-                // mainLine签名
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, packageName: " + packageName);
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA1: " + tempSHA1);
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA256: " + tempSHA256);
+            /*if (sign_sha1_ext_services.equalsIgnoreCase(tempSHA1)
+                    || sign_sha256_ext_services.equalsIgnoreCase(tempSHA256)
+                    || (sign_sha1_provider_media_module.equalsIgnoreCase(tempSHA1) && package_provider_media_module.equalsIgnoreCase(packageName))
+                    || (sign_sha1_provider_media_module_google.equalsIgnoreCase(tempSHA1) && package_provider_media_module_google.equalsIgnoreCase(packageName))
+                    || (sign_sha1_tethering.equalsIgnoreCase(tempSHA1) && package_tethering.equalsIgnoreCase(packageName))
+                    || (sign_sha1_cellbroadcastservice.equalsIgnoreCase(tempSHA1) && package_cellbroadcastservice.equalsIgnoreCase(packageName))
+                    || (sign_sha1_permissioncontroller.equalsIgnoreCase(tempSHA1) && package_permissioncontroller.equalsIgnoreCase(packageName))) {
+                // mainLine签名，由于跟google、BLU签名有重叠，暂不单独分类；但以后有可能重启该分类，故代码不要删除
                 listMainLine.add(item);
-            }
-            if (SIGN_GOOGLE_SHA1.equalsIgnoreCase(tempSHA1) && SIGN_GOOGLE_SHA256.equalsIgnoreCase(tempSHA256)) {
+                continue;
+            }*/
+            if (SIGN_GOOGLE_SHA1.equalsIgnoreCase(tempSHA1)
+                    || SIGN_GOOGLE_SHA256.equalsIgnoreCase(tempSHA256)
+                    || (sign_sha1_wellbeing.equalsIgnoreCase(tempSHA1) && package_wellbeing.equalsIgnoreCase(packageName))
+                    || (sign_sha1_packageinstaller.equalsIgnoreCase(tempSHA1) && package_packageinstaller.equalsIgnoreCase(packageName))
+                    || (sign_sha1_ext_services.equalsIgnoreCase(tempSHA1) && package_ext_services.equalsIgnoreCase(packageName))
+                    || (sign_sha1_permissioncontroller.equalsIgnoreCase(tempSHA1) && package_permissioncontroller.equalsIgnoreCase(packageName))
+                    || (sign_sha1_provider_media_module_google.equalsIgnoreCase(tempSHA1) && package_provider_media_module_google.equalsIgnoreCase(packageName))
+                    || (sign_sha1_permissionconfig.equalsIgnoreCase(tempSHA1) && package_permissionconfig.equalsIgnoreCase(packageName))
+                    || (sign_sha1_networkstack.equalsIgnoreCase(tempSHA1) && package_networkstack.equalsIgnoreCase(packageName))
+                    || (sign_sha1_tethering.equalsIgnoreCase(tempSHA1) && package_tethering.equalsIgnoreCase(packageName))
+                    || (sign_sha1_cellbroadcastservice.equalsIgnoreCase(tempSHA1) && package_cellbroadcastservice.equalsIgnoreCase(packageName))) {
                 // google签名
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, packageName: " + packageName);
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA1: " + tempSHA1);
-                Log.d(TAG, "chuxiao showTotalTestResult ww platform, SHA256: " + tempSHA256);
                 listGoogle.add(item);
+                continue;
             }
-            if (!SIGN_SPRD_PLATFORM_SHA1.equalsIgnoreCase(tempSHA1)
-                    && !SIGN_SPRD_PLATFORM_SHA256.equalsIgnoreCase(tempSHA256)
-                    && !SIGN_SPRD_MEDIA_SHA1.equalsIgnoreCase(tempSHA1)
-                    && !SIGN_SPRD_MEDIA_SHA256.equalsIgnoreCase(tempSHA256)
-                    && !SIGN_WW_PLATFORM_SHA1.equalsIgnoreCase(tempSHA1)
-                    && !SIGN_WW_PLATFORM_SHA256.equalsIgnoreCase(tempSHA256)
-                    && !SIGN_WW_MEDIA_SHA1.equalsIgnoreCase(tempSHA1)
-                    && !SIGN_WW_MEDIA_SHA256.equalsIgnoreCase(tempSHA256)
-                    && !SIGN_BLU_SHA1.equalsIgnoreCase(tempSHA1)
-                    && !SIGN_BLU_SHA256.equalsIgnoreCase(tempSHA256)
-                    && !SIGN_MAINLINE_SHA1.equalsIgnoreCase(tempSHA1)
-                    && !SIGN_MAINLINE_SHA256.equalsIgnoreCase(tempSHA256)
-                    && !SIGN_GOOGLE_SHA1.equalsIgnoreCase(tempSHA1)
-                    && !SIGN_GOOGLE_SHA256.equalsIgnoreCase(tempSHA256)) {
-                // 其它签名
-                Log.d(TAG, "chuxiao showTotalTestResult other, packageName: " + packageName);
-                Log.d(TAG, "chuxiao showTotalTestResult other, SHA1: " + tempSHA1);
-                Log.d(TAG, "chuxiao showTotalTestResult other, SHA256: " + tempSHA256);
-                listOther.add(item);
+            if (SIGN_SPRD_CLOSE_SHA1_1.equalsIgnoreCase(tempSHA1)
+                    || SIGN_SPRD_CLOSE_SHA1_2.equalsIgnoreCase(tempSHA1)
+                    || SIGN_SPRD_CLOSE_SHA1_3.equalsIgnoreCase(tempSHA1)
+                    || SIGN_SPRD_CLOSE_SHA1_4.equalsIgnoreCase(tempSHA1)) {
+                // sprd闭源签名
+                listSprdClose.add(item);
+                continue;
             }
+            // 都不符合上述条件，就属于其它签名
+            Log.d(TAG, "chuxiao showTotalTestResult other, packageName: " + packageName);
+            Log.d(TAG, "chuxiao showTotalTestResult other, SHA1: " + tempSHA1);
+            Log.d(TAG, "chuxiao showTotalTestResult other, SHA256: " + tempSHA256);
+            listOther.add(item);
         }
+
         ((TextView) findViewById(R.id.tv_total_test_result)).setText(listTotalPass.size() + "/" + list.size());
         ((TextView) findViewById(R.id.tv_abnormal_sprd_platform)).setText(listSprdPlatform.size() + "");
         ((TextView) findViewById(R.id.tv_abnormal_sprd_media)).setText(listSprdMedia.size() + "");
@@ -198,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_blu)).setText(listBlu.size() + "");
         ((TextView) findViewById(R.id.tv_mainline)).setText(listMainLine.size() + "");
         ((TextView) findViewById(R.id.tv_google)).setText(listGoogle.size() + "");
-        ((TextView) findViewById(R.id.tv_other)).setText(listOther.size() + "");
+        ((TextView) findViewById(R.id.tv_sprd_close)).setText(listSprdClose.size() + "");
         // 总测试结果设置字体颜色
         if (listTotalFail == null || listTotalFail.isEmpty()) {
             ((TextView) findViewById(R.id.tv_total_test_result)).setTextColor(Color.GREEN);
@@ -280,19 +342,18 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(Constant.IntentTAG.SUB_LIST, new SubListEntity(listGoogle));
             startActivity(intent);
         });
-
-        // 初始化其它未知签名分类的列表
-        initOtherRv(listOther);
-
-        ((LinearLayout) findViewById(R.id.tv_other).getParent()).setOnClickListener(view -> {
-            if (listOther == null || listOther.isEmpty()) {
+        ((LinearLayout) findViewById(R.id.tv_sprd_close).getParent()).setOnClickListener(view -> {
+            if (listSprdClose == null || listSprdClose.isEmpty()) {
                 Toast.makeText(MainActivity.this, "该项无内容", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(MainActivity.this, SubListActivity.class);
-            intent.putExtra(Constant.IntentTAG.SUB_LIST, new SubListEntity(listOther));
+            intent.putExtra(Constant.IntentTAG.SUB_LIST, new SubListEntity(listSprdClose));
             startActivity(intent);
         });
+
+        // 初始化其它未知签名分类的列表
+        initOtherRv(listOther);
         Toast.makeText(this, "加载成功", Toast.LENGTH_SHORT).show();
     }
 
