@@ -39,7 +39,7 @@ public class OtherAdapter extends RecyclerView.Adapter<OtherItemView> {
             return;
         }
         List<PackageInfo> typeList = mOtherSignList.get(position).typeList;
-        holder.tvOtherName.setText("分类签名" + (position + 1));
+        holder.tvOtherName.setText("自动分类签名" + (position + 1));
         holder.tvOtherNum.setText(typeList.size() + "");
         if (mOtherSignList.get(position).isOtherSingle) {
             holder.tvOtherName.setText("其它独立签名");
